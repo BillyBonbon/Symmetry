@@ -21,16 +21,17 @@ public class SnapToGrid : MonoBehaviour
 
 	private float FindNearestSnapValue(float position)
 	{
+		bool negative = position < 0;
 		float snapValue = 0.0f;
 		float remainder = position % m_snapDistance;
-		bool roundUp = (remainder >= (m_snapDistance / 2));
+		bool roundUp = (Mathf.Abs(remainder) >= (m_snapDistance / 2));
 
-		snapValue = position - remainder;
+		snapValue = Mathf.Abs(position) - Mathf.Abs(remainder);
 		if ( roundUp )
 		{
 			snapValue += m_snapDistance;
 		}
 
-		return snapValue;
+		return negative ? -snapValue : snapValue;
 	}
 }
