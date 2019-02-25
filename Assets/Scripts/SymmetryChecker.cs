@@ -19,8 +19,6 @@ public class SymmetryChecker : MonoBehaviour
 	Texture2D m_Texture2DRight = null;
 
 
-
-
 	void Start()
     {
 		m_RenderTextureLeft = m_CameraLeft.targetTexture;
@@ -36,13 +34,20 @@ public class SymmetryChecker : MonoBehaviour
 		Color[] colorsL = GetRenderTexturePixels(m_RenderTextureLeft, m_Texture2DLeft);
 		Color[] colorsR = GetRenderTexturePixels(m_RenderTextureRight, m_Texture2DRight);
 
+		int numColumns = m_RenderTextureLeft.width;
+
 		if (colorsL.Length > 0)
 		{
 			bool identical = true;
 			for (int index = 0; index < colorsL.Length; index++)
 			{
 				Color colorLeft = colorsL[index];
-				Color colorRight = colorsR[index];
+
+				int row = index / numColumns;
+				int column = index % numColumns;
+				int rightIndex = ((row+1) * numColumns) - (column + 1);
+				Color colorRight = colorsR[rightIndex];
+
 				if (!colorLeft.Equals(colorRight))
 				{
 					float dotProd = Vector4.Dot(Vector4.Normalize(colorLeft), Vector4.Normalize(colorRight));
